@@ -4,6 +4,7 @@ import com.usermgmt.entity.User;
 import com.usermgmt.enums.Role;
 import com.usermgmt.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,9 +22,20 @@ public class UserController {
     }
 
     @GetMapping
-    public String list(@RequestParam(required = false) String search, Model model) {
-        model.addAttribute("users", userService.search(search));
+    public String list(@RequestParam(required = false) String search,
+                       @RequestParam(required = false) Role roleFilter,
+                       @RequestParam(defaultValue = "firstName") String sort,
+                       @RequestParam(defaultValue = "asc") String dir,
+                       Model model) {
+        Sort.Direction direction = "desc".equalsIgnoreCase(dir) ? Sort.Direction.DESC : Sort.Direction.ASC;
+        Sort sortObj = Sort.by(direction, sort);
+
+        model.addAttribute("users", userService.search(search, roleFilter, sortObj));
         model.addAttribute("search", search != null ? search : "");
+        model.addAttribute("roleFilter", roleFilter);
+        model.addAttribute("roles", Role.values());
+        model.addAttribute("sort", sort);
+        model.addAttribute("dir", dir);
         return "users/list";
     }
 

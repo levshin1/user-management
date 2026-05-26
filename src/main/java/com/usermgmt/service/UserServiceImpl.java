@@ -1,7 +1,9 @@
 package com.usermgmt.service;
 
 import com.usermgmt.entity.User;
+import com.usermgmt.enums.Role;
 import com.usermgmt.repository.UserRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,9 +44,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<User> search(String query) {
-        if (query == null || query.isBlank()) return userRepository.findAll();
-        return userRepository.search(query.trim());
+    public List<User> search(String query, Role role, Sort sort) {
+        boolean hasQuery = query != null && !query.isBlank();
+        boolean hasRole = role != null;
+        String q = hasQuery ? query.trim() : null;
+
+        if (hasQuery && hasRole) return userRepository.searchByRole(q, role, sort);
+        if (hasQuery)            return userRepository.search(q, sort);
+        if (hasRole)             return userRepository.findByRole(role, sort);
+        return userRepository.findAll(sort);
     }
 
     @Override

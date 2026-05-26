@@ -18,6 +18,7 @@ public class UserManagementApplication {
     @Bean
     CommandLineRunner seedData(UserRepository userRepository) {
         return args -> {
+            if (userRepository.count() > 0) return;
             userRepository.save(new User("Alice", "Johnson", "alice@example.com", Role.ADMIN, "555-0101"));
             userRepository.save(new User("Bob", "Smith", "bob@example.com", Role.MANAGER, "555-0102"));
             userRepository.save(new User("Carol", "Williams", "carol@example.com", Role.EMPLOYEE, "555-0103"));
