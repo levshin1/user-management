@@ -11,4 +11,5 @@ public interface UserService {
     User save(User user);
     void deleteById(Long id);
     boolean isEmailTakenByOther(String email, Long excludeId);
+    List<User> search(String query);
 }

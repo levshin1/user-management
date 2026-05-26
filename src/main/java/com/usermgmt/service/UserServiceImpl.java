@@ -42,6 +42,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
+    public List<User> search(String query) {
+        if (query == null || query.isBlank()) return userRepository.findAll();
+        return userRepository.search(query.trim());
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public boolean isEmailTakenByOther(String email, Long excludeId) {
         if (excludeId == null) {
             return userRepository.findByEmail(email).isPresent();

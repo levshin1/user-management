@@ -48,6 +48,20 @@
         </a>
     </div>
 
+    <!-- Search -->
+    <form method="get" action="/users" class="mb-3">
+        <div class="input-group" style="max-width: 400px;">
+            <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+            <input type="text" name="search" class="form-control border-start-0"
+                   placeholder="Search by name or email…"
+                   th:value="${search}" autocomplete="off">
+            <button type="submit" class="btn btn-outline-secondary">Search</button>
+            <a th:if="${!#strings.isEmpty(search)}" href="/users" class="btn btn-outline-danger">
+                <i class="bi bi-x-lg"></i>
+            </a>
+        </div>
+    </form>
+
     <!-- Table -->
     <div class="card shadow-sm">
         <div class="card-body p-0">

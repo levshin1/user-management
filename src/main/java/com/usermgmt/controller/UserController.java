@@ -21,8 +21,9 @@ public class UserController {
     }
 
     @GetMapping
-    public String list(Model model) {
-        model.addAttribute("users", userService.findAll());
+    public String list(@RequestParam(required = false) String search, Model model) {
+        model.addAttribute("users", userService.search(search));
+        model.addAttribute("search", search != null ? search : "");
         return "users/list";
     }
 
